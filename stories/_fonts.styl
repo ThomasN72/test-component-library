@@ -1,0 +1,97 @@
+$ff-default = 'Avenir', 'Helvetica Neue', Arial, Helvetica, sans-serif
+$ff-helvetica = 'Helvetica Neue', Helvetica, sans-serif
+$ff-card = 'OCR-A W00 Regular', monospace
+$ff-number = 'Titillium Web', $ff-default
+
+$fw-light = 300
+$fw-roman = 500
+$fw-medium = 600
+$fw-heavy = 800
+
+$fs-h1 = 36px
+$fs-h2 = 28px
+$fs-h3 = 24px
+$fs-h4 = 20px
+$fs-h5 = 18px
+$fs-h6 = 14px
+$fs-body-large = 14px
+$fs-label-large = $fs-body-large
+$fs-body-medium = 12px
+$fs-body-small = 11px
+$fs-label-small = $fs-body-small
+
+size-10($addToLineHeight = 0px)
+  font-size 10px
+  line-height 14px + $addToLineHeight
+
+size-12($addToLineHeight = 0px)
+  font-size 12px
+  line-height 16px + $addToLineHeight
+
+size-14($addToLineHeight = 0px)
+  font-size 14px
+  line-height 20px + $addToLineHeight
+
+size-16($addToLineHeight = 0px)
+  font-size 16px
+  line-height 22px + $addToLineHeight
+
+size-18($addToLineHeight = 0px)
+  font-size 18px
+  line-height 24px + $addToLineHeight
+
+size-24($addToLineHeight = 0px)
+  font-size 24px
+  line-height 30px + $addToLineHeight
+
+size-32($addToLineHeight = 0px)
+  font-size 32px
+  line-height 40px + $addToLineHeight
+
+.size-10
+  size-10()
+
+.size-12
+  size-12()
+
+.size-14
+  size-14()
+
+.size-16
+  size-16()
+
+.size-18
+  size-18()
+
+.size-24
+  size-24()
+
+.size-32
+  size-32()
+
+small-label()
+  size-10()
+  color $c-secondary-500
+  font-weight $fw-heavy
+  text-transform uppercase
+
+small-info-label()
+  size-10()
+  // Need to get this color defined
+  color #80a2b3
+  font-weight $fw-medium
+  text-transform uppercase
+
+medium-label()
+  size-14()
+  color $c-secondary-700
+  font-weight $fw-heavy
+
+.small-label
+  small-label()
+
+.small-info-label
+  small-info-label()
+
+.medium-label
+  medium-label()

@@ -1,0 +1,377 @@
+clearfix()
+  &:after
+    content "" !important
+    display block !important
+    clear both !important
+
+// Position an element so that it's always the full width of the viewport
+// no matter the width of a parent container
+full-bleed-element()
+  position relative
+  width 100vw
+  max-width $max-fullbleed-width
+  left 50%
+  transform translateX(-50%)
+
+full-bleed-color($color)
+  position relative
+
+  &::before
+    content ''
+    position absolute
+    top 0
+    bottom 0
+    left 50%
+    width 100vw
+    background $color
+    transform translateX(-50vw)
+
+  > *
+    position relative
+    z-index 1
+
+// Position an element to cover the entirety of it's parent
+cover($position = absolute)
+  position $position
+  top 0
+  left 0
+  height 100%
+  width 100%
+  z-index 5
+
+// Force an element to have a particular width/height ratio, no matter the width
+// Any content you put inside the ratio-boxes needs to be absolutely positioned
+fixed-ratio($ratio = 1)
+  overflow hidden
+  position relative
+
+  // The container's height, as a percentage of the
+  // container's width, is set by assigning
+  // padding-top to a pseudo-element.
+  &::before
+    content ""
+    display block
+    width 100%
+    height 0
+    padding-top 100% * (1 / $ratio)
+
+// Hide text visually, leaving it accesible to screen-readers
+hide-text()
+  overflow hidden
+  white-space nowrap
+  text-indent 100%
+
+// Hide the element entirely, leaving it accessible to screen-readers
+hide-visually()
+  overflow hidden !important
+  position absolute !important
+  height 1px !important
+  width 1px !important
+  clip rect(1px, 1px, 1px, 1px) !important
+  clip-path inset(50%) !important
+  white-space nowrap !important
+  border 0 !important
+
+// Set all the link colors at once
+link-colors($normal, $hover = false, $active = false, $visited = false, $focus = false)
+  color $normal
+
+  if $visited
+    &:visited
+      color $visited
+
+  if $focus
+    &:focus
+      color $focus
+
+  if $hover
+    if $focus
+      &:hover
+        color $hover
+    else
+      &:hover,
+      &:focus
+        color $hover
+
+  if $active
+    &:active
+      color $active
+
+// Uppercase with letterspacing
+uppercase($spacing = 0.07em)
+  text-transform uppercase
+  letter-spacing $spacing
+
+// Show an ellipsis on text overflow
+// Requires inline-block or block for proper styling
+text-overflow()
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
+
+// Antialias text
+antialias()
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  font-smoothing antialiased
+
+visuallyhidden()
+  position absolute
+  overflow hidden
+  clip rect(0 0 0 0)
+  height 1px
+  width 1px
+  margin -1px
+  padding 0
+  border 0
+
+resetButton()
+  border none
+  outline none
+  margin 0
+  padding 0
+  width auto
+  overflow visible
+  background transparent
+  color inherit
+  font inherit
+  text-align inherit
+  line-height normal
+  -webkit-font-smoothing inherit
+  -moz-osx-font-smoothing inherit
+  appearance none
+
+  &::-moz-focus-inner
+    border 0
+    padding 0
+
+resetInput()
+  border none
+  border-radius 0
+  outline none
+  margin 0
+  padding 0
+  width auto
+  background transparent
+  color inherit
+  font inherit
+  text-align inherit
+  line-height normal
+  -webkit-font-smoothing inherit
+  -moz-osx-font-smoothing inherit
+  appearance none
+
+heading()
+  font-weight $fw-heavy
+  uppercase(1px)
+
+subheading($size = false, $uppercase = 1px)
+  if $uppercase
+    uppercase($uppercase)
+  if $size == 'large'
+    font-size $fs-body-large
+  if $size == 'medium'
+    font-size $fs-body-medium
+  if $size == 'small'
+    font-size $fs-body-small
+
+  font-weight $fw-heavy
+  color $c-blue-grey-500
+
+  a
+    display inline-block
+    margin 0 0 0 1em
+    text-transform none
+    color $c-link
+
+    &:hover
+      color $c-link-active
+
+// ---------------------------------------------------------------------------
+// Media Queries
+$queries = {
+  '>=': min-width,
+  '>': min-width,
+  '<=': max-width,
+  '<': max-width,
+}
+
+// You can override $breakpoints definition by defining
+// $breakpoints before this file is imported
+$breakpoints ?= {
+  'xsmall': 400px,
+  'small': 768px,
+  'medium': 992px,
+  'large': 1200px,
+}
+
+media($first, $second = null)
+  $matches1 = match('^([<>=]+)(\w+)', $first)
+  $qk1 = $matches1[1]
+  $bpk1 = $matches1[2]
+  if $second
+    $matches2 = match('^([<>=]+)(\w+)', $second)
+    $qk2 = $matches2[1]
+    $bpk2 = $matches2[2]
+
+  $breakpoint1 = $breakpoints[$bpk1]
+  if $second
+    $breakpoint2 = $breakpoints[$bpk2]
+
+  if $qk1 == '>'
+    $breakpoint1 = $breakpoint1 + 1px
+  if $qk1 == '<'
+    $breakpoint1 = $breakpoint1 - 1px
+  if $qk2 == '>'
+    $breakpoint2 = $breakpoint2 + 1px
+  if $qk2 == '<'
+    $breakpoint2 = $breakpoint2 - 1px
+
+  if $second
+    @media screen and ({$queries[$qk1]}: $breakpoint1) and ({$queries[$qk2]}: $breakpoint2)
+      {block}
+  else
+    @media screen and ({$queries[$qk1]}: $breakpoint1)
+      {block}
+
+// Z-levels
+z-depth-1()
+  box-shadow 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+
+z-depth-1-half()
+  box-shadow 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15)
+
+z-depth-2()
+  box-shadow 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+
+z-depth-3()
+  box-shadow 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19)
+
+z-depth-4()
+  box-shadow 0 16px 28px 0 rgba(0, 0, 0, 0.22), 0 25px 55px 0 rgba(0, 0, 0, 0.21)
+
+z-depth-5()
+  box-shadow 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22)
+
+focus-shadow()
+  box-shadow 0 0 8px rgba(0,0,0,.18),0 8px 16px rgba(0,0,0,.36)
+
+// SHADOWS
+$shadow-key-umbra-opacity ?= 0.2
+$shadow-key-penumbra-opacity ?= 0.14
+$shadow-ambient-shadow-opacity ?= 0.12
+
+shadow-2dp()
+  box-shadow 0 1px 2px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+             0 3px 1px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+             0 1px 5px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity)
+
+shadow-2dp-alt()
+  box-shadow 0 3px 1px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+             0 1px 5px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity)
+
+shadow-3dp()
+  box-shadow 0 3px 4px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+             0 3px 3px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+             0 1px 8px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity)
+
+shadow-4dp()
+  box-shadow 0 4px 5px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+             0 1px 10px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
+             0 2px 4px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity)
+
+shadow-6dp()
+  box-shadow 0 6px 10px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+             0 1px 18px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
+             0 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity)
+
+shadow-8dp()
+  box-shadow 0 8px 10px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+             0 3px 14px 2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
+             0 5px 5px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity)
+
+shadow-16dp()
+  box-shadow 0 16px 24px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+             0  6px 30px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
+             0  8px 10px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity)
+
+shadow-24dp()
+  box-shadow 0  9px 46px  8px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+             0 11px 15px -7px rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
+             0 24px 38px  3px rgba(0, 0, 0, $shadow-key-umbra-opacity)
+
+// Avatar mixins
+avatar-size($size)
+  font-size $size !important
+  width 1em !important
+  height 1em !important
+
+avatar-border()
+  border .085em solid white
+  border-radius 500rem
+
+// Cards
+shortShadow()
+  box-shadow 0 1px 5px rgba(0, 0, 0, .2)
+
+// Tooltips, Dropdowns, Toasts, Floating Buttons
+mediumShadow()
+  box-shadow 0 2px 8px rgba(0, 0, 0, .2)
+
+// Modals
+longShadow()
+  box-shadow 0 4px 14px rgba(0, 0, 0, .2)
+
+avatar-shadow()
+  z-depth-1()
+
+boxShadow($opacity = 0.3)
+  border none
+  box-shadow 0 0 2px rgba(0, 0, 0, $opacity)
+
+segmentStyles($paddingMultiplier = 2, $radius = $radius-medium)
+  boxShadow()
+  background-color white
+  border-radius $radius
+  padding $paddingMultiplier * 8px
+
+tableStyles($radius = $radius-medium)
+  segmentStyles(0, $radius)
+
+  &
+  table
+    border-collapse collapse
+    width 100%
+
+  th
+    size-12()
+    color $c-grey-900
+    padding 8px 12px
+    text-align left
+    text-transform uppercase
+
+    &[class*='--sortable']
+      cursor pointer
+
+    &[class*='--sorted']
+      color $c-primary-500
+
+  th
+  td
+    white-space nowrap
+
+  tbody
+    tr
+      color $c-blue-grey-500
+      border-top 1px solid $c-blue-grey-50
+
+greedyTableStyles($radius = $radius-medium)
+  tableStyles($radius)
+  flex-grow 1
+  overflow-x auto
+
+  &::-webkit-scrollbar
+    background transparent
+    height 0
+    width 0
+    -webkit-appearance none
