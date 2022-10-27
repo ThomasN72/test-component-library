@@ -53,3 +53,5 @@ docker_volumes
 # Virtual environment files
 venv
 .venv
+
+storybook-static/

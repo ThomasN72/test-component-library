@@ -1,3 +1,7 @@
+@import './_colors'
+@import './_dimensions'
+@import './_fonts'
+@import './_mixins'
 
 .textarea
   background $c-grey-100
@@ -8,3 +12,24 @@
   min-width 320px
   padding 8px
   resize none
+
+  &:disabled
+    color $c-grey-300
+    background $c-grey-50
+    border 1px solid blend($c-white--rgba-70, $c-grey-100)
+
+    &.textarea--error-true
+      border 1px solid blend($c-white--rgba-70, $c-reject-500)
+
+    &::placeholder
+      color blend($c-white--rgba-70, $c-grey-300)
+
+  &--error-true
+    border 1px solid $c-reject-500
+
+  &:focus
+    border 1px solid $c-primary-500
+    outline none
+
+  &::placeholder
+    color $c-grey-300
